@@ -11,7 +11,7 @@ def BandPassFilter(data, dt, para, tExt1 = 0, rmSec = 2):
     
     # Frequencies              Xe_low_cutoff   Xe_low_trans_width   Xe_high_cutoff   Xe_high_trans_width   He_low_cutoff   He_low_trans_width    He_high_cutoff   He_high_trans_width
     XeHe_cutoff_trans_freq = [       0.5,               0.2,                2.5,            0.2,               14,                 0.2,                16,               0.2 ]
-    data_filt = np.array([ np.concatenate( (t_BF, data[0], tAdd) ), np.concatenate( (fitSine2Slope(para, t_BF), data[1], fitSine2Slope(para, tAdd)) )])
+    data_filt = np.array([ np.concatenate( (t_BF, data[0], tAdd) ), np.concatenate( (fitSine2Slope(para, t_BF), data[1], fitSine2Slope(para, tAdd)) ) ])
     Lfilt = len(data_filt[1])
     Fs = 1/dt
     f = Fs*np.linspace(0, 1, Lfilt)
