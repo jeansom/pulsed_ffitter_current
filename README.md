@@ -10,6 +10,7 @@ pulsed_fitter_current.ipynb
     * corrphase.py
   * Called By
     * N/A
+
 partialfitting.py
   * Runs partial fitting
   * Functions
@@ -24,6 +25,7 @@ partialfitting.py
     * fitfunctions.py
   * Called By
     * pulsed_fitter_current.ipynb
+
 corr2Pi.py
   * Corrects phase by 2Pi
   * correct2Pi: loops over an array of phases and calls find2PiN to find the correct number of 2Pi's to add to each phase. * * Returns the phase array corrected by 2Pis
