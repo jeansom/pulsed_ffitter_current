@@ -5,11 +5,11 @@ import scipy.fftpack as fft
 from scipy.linalg import svd
 
 def least_sq( y, yfit ):
-    return sum( (y - yfit)**2 )
+    return np.sum( (y - yfit)**2 )
 
-def curve_fit( func, x, y, sigma, p0, bounds, bandwidth=0 ):
+def curve_fit( func, x, y, sigma, p0, bounds ):
     if bounds == []:
-        fit = optimize.leastsq( lambda args: (func(x, *args)-y)/sigma, x0=p0, full_output=1, ftol=1e-10, gtol=1e-10, xtol=1e-10 )
+        fit = optimize.leastsq( lambda args: (func(x, *args)-y)/sigma, x0=p0, full_output=1, ftol=1e-15, gtol=1e-15, xtol=1e-15 )
         cov = fit[1]
         fit = fit[0]
         fitval = func(x, *fit)
@@ -23,7 +23,7 @@ def curve_fit( func, x, y, sigma, p0, bounds, bandwidth=0 ):
             print("NONE")
             fiterr = np.ones(len(fit))*1e9
     else:
-        fit = optimize.least_squares( lambda args: (func(x, *args)-y)/sigma, x0=p0, bounds=bounds, ftol=1e-10, gtol=1e-10, xtol=1e-10 )
+        fit = optimize.least_squares( lambda args: (func(x, *args)-y)/sigma, x0=p0, bounds=bounds, ftol=1e-15, gtol=1e-15, xtol=1e-15 )
         jac = fit['jac']
         fit = fit['x']
         _, s, VT = svd(jac, full_matrices=False)
@@ -32,10 +32,7 @@ def curve_fit( func, x, y, sigma, p0, bounds, bandwidth=0 ):
         VT = VT[:s.size]
         cov = np.dot(VT.T / s**2, VT)
         fiterr = np.sqrt(np.diag(cov))
-    if bandwidth == 0:
-        return fit, fiterr
-    else:
-        return fit, fiterr*bandwidth
+    return fit, fiterr
 
 def fitSine2Slope( para, t, t0=-999 ):
     if t0 == -999: t0 = 0
