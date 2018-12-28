@@ -14,9 +14,11 @@ def tarFileAndRemove(fname):
         print("Directory does not exist!")
 
 def untar(fname):
-    if (os.path.isfile(fname+".gz")):
+    if os.path.isdir(fname):
+        print("Something's already extracted there!")
+    elif (os.path.isfile(fname+".gz")):
         tar = tarfile.open(fname+".gz")
         tar.extractall(path=fname)
         tar.close()
     else:
-        print("Not a .gz file")
+        print("Not a .gz file!")

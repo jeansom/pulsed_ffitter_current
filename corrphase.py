@@ -5,26 +5,26 @@ from chi2 import *
 from fitFunctions import *
 
 def corrphase(saveDirName, k_ind, absSigma, phi1_arr=[], phi2_arr=[], phi1_err=[], phi2_err=[], r=[]):
-#    try: 
-    save_arrs = np.load(saveDirName+"/initialfitting_"+str(k_ind)+".npz")
-    times = save_arrs['times']
-    errtout_arr = save_arrs['errtout_arr']
-    phi1_err = errtout_arr[:,5]; phi2_err = errtout_arr[:,2]
-    save_arrs = np.load(saveDirName+"/correctphases_"+str(k_ind)+".npz")
-    phi1_arr = save_arrs['phi1_arr']
-    phi2_arr = save_arrs['phi2_arr']
-    r_arrs = [f for f in os.listdir(saveDirName) if f.endswith('.npz')]
-    r = []
-    for fi in r_arrs:
-        if 'fitPhases' in fi:
-            r.append(np.load(saveDirName+"/"+fi)['r_chi21_chi22'][0])
-    r = np.array(r)
-    r = np.mean(r[np.abs(r-r[0])<0.00005])
-    print(r)
-#    except:
-#        if not(len(phi1_arr)>0 and len(phi1_err)>0 and len(phi2_arr)>0 and len(phi2_err)>0):
-#            print("RUN INITIALFITTING, CORRECTPHASES, AND FITPHASES FIRST OR PROVIDE ARRAYS!!!")
-#            sys.exit()
+    try: 
+        save_arrs = np.load(saveDirName+"/initialfitting_"+str(k_ind)+".npz")
+        times = save_arrs['times']
+        errtout_arr = save_arrs['errtout_arr']
+        phi1_err = errtout_arr[:,5]; phi2_err = errtout_arr[:,2]
+        save_arrs = np.load(saveDirName+"/correctphases_"+str(k_ind)+".npz")
+        phi1_arr = save_arrs['phi1_arr']
+        phi2_arr = save_arrs['phi2_arr']
+        r_arrs = [f for f in os.listdir(saveDirName) if f.endswith('.npz')]
+        r = []
+        for fi in r_arrs:
+            if 'fitPhases' in fi:
+                r.append(np.load(saveDirName+"/"+fi)['r_chi21_chi22'][0])
+        r = np.array(r)
+        r = np.mean(r[np.abs(r-r[0])<0.00005])
+        print(r)
+    except:
+        if not(len(phi1_arr)>0 and len(phi1_err)>0 and len(phi2_arr)>0 and len(phi2_err)>0):
+            print("RUN INITIALFITTING, CORRECTPHASES, AND FITPHASES FIRST OR PROVIDE ARRAYS!!!")
+            sys.exit()
     cp_err = np.sqrt(phi1_err**2 + (phi2_err*r)**2)
     cp = phi1_arr - r*phi2_arr
     
