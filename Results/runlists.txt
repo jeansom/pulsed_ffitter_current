@@ -1,0 +1,5 @@
+2018-12-27_22-00.gz
+	Run over data from 18-12-15 (files 5-49, 500 sec files, 250 sec pumping). delta t = 2/1.56, t_start = 20, t_end = 500, keiser filter
+
+2018-12-28_06-28.gz
+	Run over data from 18-12-19 (files 5-116, 500 sec files, 250? sec pumping). delta t = 2/1.56, t_start = 20, t_end = 500, keiser filter
