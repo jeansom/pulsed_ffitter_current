@@ -18,7 +18,7 @@ def averageData(data, n_ave):
     data = np.mean( data.reshape(-1, n_ave), axis=1 ) # Average data
     return data
 
-def initialfitting(saveDirName, k_ind, k, n_ave, dirName, files, dt, Fs, D1Start, D1EndTimes, D2Start, D2EndTimes, delta_t, disp=False):
+def initialfitting(saveDirName, k_ind, k, n_ave, dirName, files, dt, Fs, D1Start, D1EndTimes, D2Start, D2EndTimes, delta_t, disp=False, width=3):
     
     paraOut = np.array([1.1, 1.1, 0.5, 0.5, 1e-10, 1e-10 ]) # Initial parameters for fit
     
@@ -35,7 +35,7 @@ def initialfitting(saveDirName, k_ind, k, n_ave, dirName, files, dt, Fs, D1Start
     datafit = np.array([ times[ind_DStart:ind_DEnd] - times[ind_DEnd-1], data[ind_DStart:ind_DEnd] ])
     # Run fit a few times to get initial parameters
     eps = 1e-12
-    datafit = BandPassFilter(datafit, dt, paraOut, 500, 500) # Bandpass filter
+    datafit = BandPassFilter(datafit, dt, paraOut, 500, 500, width) # Bandpass filter
     datafit = np.array(datafit)
     paraOut = optimize.minimize( lambda para: least_sq(datafit[1], fitSine2Slope([para[0], para[1], 1.5554, para[2], para[3], 15.008, para[4], para[5]], datafit[0]))/1e6, [ paraOut[0], paraOut[1], paraOut[2], paraOut[3], paraOut[4], paraOut[5] ], method="SLSQP", bounds=bounds_fixfreq, tol=1e-15, options={'eps': eps, 'disp': disp, 'ftol':1e-15, 'maxiter':5000} ).x
     paraOut = optimize.minimize( lambda para: least_sq(datafit[1], fitSine2Slope(para, datafit[0]))/1e5, [ paraOut[0], paraOut[1], 1.5554, paraOut[2], paraOut[3], 15.008, paraOut[4], paraOut[5] ], method="SLSQP", bounds=bounds, tol=1e-30, options={'eps': 1e-12, 'disp': disp, 'ftol':1e-15, 'maxiter':5000} ).x
@@ -75,7 +75,7 @@ def initialfitting(saveDirName, k_ind, k, n_ave, dirName, files, dt, Fs, D1Start
             np.sqrt(8*sigma**2 / (A2**2 * N)),
             sigma/np.sqrt(N), np.sqrt(2*sigma**2/(dt*N**2))
         ]
-    np.savez(os.path.join(saveDirName, 'initialfitting_'+str(k_ind)+'.npz'), paraOut_arr=np.array(paraOut_arr), errtout_arr=np.array(errtout_arr), times=np.mean(np.array(dataPar_x), axis=1))
+    np.savez(os.path.join(saveDirName, 'initialfitting_'+str(k_ind)+'.npz'), paraOut_arr=np.array(paraOut_arr), errtout_arr=np.array(errtout_arr), dataPara_x=np.array(dataPar_x), dataPara_y=np.array(dataPar_y), datafit2=np.array(datafit2), times=np.mean(dataPar_x, axis=1))
 
 def fitSubsec( dataPar_x, dataPar_y, paraOut, disp=False ):
     eps = 1e-12
